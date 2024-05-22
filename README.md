@@ -1,28 +1,24 @@
-# Project-Part-1
+## Bloom Filter
+A bloom filter is a probabilistic data structure that is based on hashing. It is extremely time and space efficient and is typically used to add elements to a set and test if an element is in a set. However, the elements themselves are not added to a set. Instead a hash of the elements is added to the set.
 
-Please note that Meitar Teper just returned from Miluim and therefore worked less on this part of the project than the others.
+When testing if an element is in the bloom filter, false positives are possible. It will either say that an element is definitely not in the set or that it is possible the element is in the set.
 
-## Our Work Process:
-### Jira:
-We created a Jira project, started a two weeks sprint including issues and separation for epics.
+To address false positives we will:
+- Use longer bit arrays.
+- Double check against the real list of blacklisted URLs for any result which is
+positive - to ensure it is not a false positive.
 
-### TDD:
-At first we wrote the tests we wanted our program to contain, thinking of the future methods and implementations.
-Back and forth process, creating tests and then creating cpp classes, repairing tests, repairing classes etc.
+A bloom filter is very much like a hash table in that it will use a hash function to map a key to a bucket. However, it will not store that key in that bucket, it will simply mark it as filled. So, many keys might map to same filled bucket, creating false positives.
 
-### Github:
-We created a private repository and included all the project members, each working on his own computer using his own
-user in git. The process went through the feature of branches principle, meaning everybody works on his branch and
-eventually merging his branch to the main.
+### Our Bloom Filter
+In our project the bloom filter holds all the URLs that are not safe.
+First, we initialize an array with zeros.
+Then, we insert all the URLs that are not safe. Every time a user want to edit or upload a URL the program will check if it is safe.
 
-### Docker:
-Creating the file as required 
-
-### Refactors being made:
-We started with the naive implementation as we thought was correct, gradually changing the structure of our program
-to contain two interfaces: IHash and ICommand, thus using the encapsulation principle and hiding the implementation
-from the user. Moreover, we used the separation of concerns principle, giving each class and method the minimum 
-responsibility required for proper functioning.
+## TCP server
+This server connects between our nodeJS server and the Bloom Filter through a socket. 
+This server is multithreaded so it can handle many requests and for each one of them it opens a new thread.
+The server helps us to make sure our app doesn't contain unsafe URLs. Every time a user wants to add or edit a post, if the post contains a URL it will be send to the TCP server and the server will return 'true' if the URL is safe, 'false' otherwise.  
 
 ## How to compile and run our program:
 
